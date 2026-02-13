@@ -93,3 +93,11 @@ def timeline(user_id):
         'user_id' : user_id,
         'timeline' : timeline
     })
+
+# 과제 1. 유저 정보 조회 API
+# 존재하지 않는 유저 요펑 시 400 에러 반환        
+@app.route('/user/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    if user_id not in app.users:
+            return '사용자가 존재하지 않습니다.', 400
+    
