@@ -117,3 +117,38 @@ def get_users():
         user_list.append(filtered_user)
 
     return jsonify(user_list)
+
+# 과제 3. 트윗 삭제 기능
+# 해당 유저의 해당 트윗을 삭제하고 자기 트윗만 삭제하도록 검증
+@app.route('/tweet', methods=['DELETE'])
+def tweet_del():
+    payload = request.json
+    user_id = int(payload['id'])
+    tweet_text = payload['tweet']
+
+    if user_id not in app.users:
+        return '사용자가 존재하지 않습니다.', 400
+
+    deleted = remove_tweet(user_id, tweet_text)
+
+    if not deleted:
+        return '삭제할 트윗이 없습니다.', 400
+
+    return '', 200
+
+    def remove_tweet(user_id, tweet_text):
+
+    new_tweets = []
+    deleted = False
+
+    for tweet in app.tweets:
+
+        if tweet['user_id'] == user_id and tweet['tweet'] == tweet_text:
+            deleted = True
+            continue
+
+        new_tweets.append(tweet)
+
+    app.tweets = new_tweets
+
+    return deleted
